@@ -1,28 +1,126 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <canvas id="thorvg" width="100" height="100"></canvas>
-  <script>
-    var Module = {
-      onRuntimeInitialized: function() {
+<head>
+  <style>
+   .w3-color-picker-size {
+     width: 20px;
+     height: 20px;
+   }
 
-        class SvgViewer {
-          constructor() {
-             var instance = new Module.ThorvgWasm();
-             console.log('[GGGGGGGGGG]: ' + instance.mydata());
-             console.log('[GGGGGGGGGG]: ' + instance.getError());
-             this.canvas = document.getElementById("thorvg");
-             var context = this.canvas.getContext('2d');
-             var buffer = instance.render(this.canvas.width, this.canvas.height);
-             var clampedBuffer = Uint8ClampedArray.from(buffer);
-             console.log('[GGGGGGGGGG]: ' + instance.getError());
-             var imageData = new ImageData(clampedBuffer, this.canvas.width, this.canvas.height);
-             context.putImageData(imageData, 0, 0);
-          }
-        }
+   .w3-content-area {
+     min-height: 1000px;
+     min-width: 300px;
+   }
 
-        var instance = new SvgViewer();
-      }
-    };
-  </script>
-  <script src="thorvg-wasm.js"></script>
+   .w3-thorvg-area {
+     min-height: 410px;
+   }
+
+   .w3-hidden-spacer {
+     height: 0px;
+     visibility:hidden;
+   }
+
+   .w3-thorvg-color {
+     background-color:#daebeb!important;
+   }
+
+   .slidecontainer {
+     width: 100%;
+   }
+
+   .slider {
+     -webkit-appearance: none;
+     width: 100%;
+     height: 4px;
+     border-radius: 2px;
+     background: #d3d3d3;
+     outline: none;
+     opacity: 0.7;
+     -webkit-transition: .2s;
+     transition: opacity .2s;
+   }
+
+   .slider:hover {
+     opacity: 1;
+   }
+
+   .slider::-webkit-slider-thumb {
+     -webkit-appearance: none;
+     appearance: none;
+     width: 15px;
+     height: 15px;
+     border-radius: 50%;
+     background: #0394fc;
+     cursor: pointer;
+   }
+
+   .slider::-moz-range-thumb {
+     width: 15px;
+     height: 15px;
+     border-radius: 50%;
+     background: #4CAF50;
+     cursor: pointer;
+   }
+  </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/w3-cache.css">
+<body>
+
+<div class="w3-container w3-green">
+  <h1>ThorVG Viewer</h1>
+  <p>Drag& Drop SVG file</p>
+</div>
+
+<div class="w3-container  w3-light-grey ">
+  <div class="w3-auto w3-container w3-border w3-panel w3-card w3-white w3-round-xlarge w3-content-area ">
+      <div class="w3-container w3-margin-bottom">
+        <input type="button" value="Choose File" id="p-selector-btn"
+               class="w3-button w3-thorvg-color w3-small w3-card w3-right w3-text-black w3-stretch w3-round ">
+        <input class="w3-right w3-hide" type="file" id="p-selector" accept=".svg">
+      </div>
+      <div id="p-content-bg"class="w3-container w3-stretch  w3-thorvg-area">
+        <div id="p-content" class="w3-content w3-auto w3-stretch w3-thorvg-area" style="max-width:410px;">
+          <canvas class="" id="p-canvas" width="100" height="100" style="border:1px solid #dae1e7;"></canvas>
+        </div>
+      </div>
+      <div class="w3-container w3-row">
+        <div class="w3-container w3-rest">
+          <div class="slidecontainer w3-container ">
+            <input id="p-slider" type="range" min="0" max="100" value="0" class="slider" oninput="onResizeSliderDrag(this.value)" >
+          </div>
+          <div class="w3-panel " style="padding:0">
+            <p id="p-slider-cur" class="w3-left w3-tiny w3-light-grey w3-padding">s</p>
+            <p id="p-slider-max" class="w3-right w3-tiny w3-light-grey w3-padding">e</p>
+          </div>
+        </div>
+      </div>
+      <div class="w3-container w3-border-bottom w3-stretch w3-margin-bottom">
+      </div>
+      <div class="w3-container">
+        <div class="w3-container w3-row w3-stretch">
+          <div class="w3-threequarter w3-round-large  w3-thorvg-color">
+            <div class="w3-container ">
+              <div class="w3-container w3-small w3-row ">
+                <p>Background Color :</p>
+              </div>
+              <div class="w3-container w3-row" style="width:410px;">
+                <span class="w3-tag w3-color-picker-size w3-red  w3-circle" onclick="document.getElementById('p-content-bg').style.backgroundColor = 'red'"></span>
+                <span class="w3-tag w3-color-picker-size w3-green  w3-circle" onclick="document.getElementById('p-content-bg').style.backgroundColor = 'green'"></span>
+                <span class="w3-tag w3-color-picker-size w3-blue  w3-circle" onclick="document.getElementById('p-content-bg').style.backgroundColor = 'blue'"></span>
+                <span class="w3-tag w3-color-picker-size w3-white  w3-circle" onclick="document.getElementById('p-content-bg').style.backgroundColor = 'white'"></span>
+                <span class="w3-tag w3-color-picker-size w3-black  w3-circle" onclick="document.getElementById('p-content-bg').style.backgroundColor = 'black'"></span>
+              </div>
+            </div>
+          </div>
+          <div class="w3-quarter w3-green w3-round-large w3-hidden-spacer">
+            <p> Other Half :</p>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+<script src="main.js"></script>
+</body>
 </html>
